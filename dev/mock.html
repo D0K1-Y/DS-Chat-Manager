@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<script>window.__dscm_err__=[];window.addEventListener('error',function(e){window.__dscm_err__.push(e.message)});window.addEventListener('unhandledrejection',function(e){window.__dscm_err__.push('rej:'+e.reason)});</script>
+<meta charset="utf-8" />
+<title>本地预览 · DeepSeek 对话文件夹</title>
+<link rel="stylesheet" href="../extension/src/host.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #fff; color: #1f2329; font-size: 14px;
+    display: flex; overflow: hidden;
+  }
+  .sidebar {
+    width: 280px; flex: 0 0 280px; height: 100%;
+    background: #f7f9fc; border-right: 1px solid #e9edf4;
+    display: flex; flex-direction: column; padding: 14px 10px 10px;
+  }
+  .brand { display: flex; align-items: center; gap: 9px; padding: 0 6px 14px; }
+  .brand .logo { width: 22px; height: 22px; border-radius: 7px; background: #4d6bfe; color: #fff;
+    font-size: 13px; font-weight: 700; display: grid; place-items: center; }
+  .brand .name { font-size: 15px; font-weight: 600; }
+  .new-chat {
+    display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px;
+    background: #fff; border: 1px solid #e6eaf2; border-radius: 10px; color: #1f2329;
+    font-size: 13px; cursor: pointer; margin-bottom: 12px;
+  }
+  .scroll { flex: 1 1 auto; overflow-y: auto; }
+  .section-title { padding: 6px 8px 4px; font-size: 11px; font-weight: 600; color: #98a0ae; letter-spacing: .04em; }
+  .conv-list { display: flex; flex-direction: column; gap: 2px; }
+  .conv-item {
+    display: flex; align-items: center; height: 34px; padding: 0 10px; border-radius: 8px;
+    color: #3c4353; text-decoration: none; font-size: 13px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .conv-item:hover { background: rgba(15, 23, 42, .055); }
+  .foot { display: flex; align-items: center; gap: 9px; padding: 10px 6px 2px; border-top: 1px solid #e9edf4; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; background: #d9dff1; color: #48568c;
+    display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+  .foot .who { font-size: 12.5px; }
+  main { flex: 1 1 auto; display: flex; flex-direction: column; }
+  .topbar { height: 54px; display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; border-bottom: 1px solid #f0f2f6; font-weight: 600; font-size: 14px; }
+  .chat { flex: 1 1 auto; padding: 28px 48px; display: flex; flex-direction: column; gap: 18px; overflow: hidden; }
+  .msg-user { align-self: flex-end; background: #eef2ff; border-radius: 14px; padding: 12px 16px; font-size: 13.5px; color: #2b3552; }
+  .msg-ai { display: flex; gap: 12px; }
+  .msg-ai .avatar2 { width: 24px; height: 24px; border-radius: 50%; background: #4d6bfe; color: #fff;
+    display: grid; place-items: center; font-size: 11px; font-weight: 700; flex: 0 0 auto; }
+  .msg-ai .bubble { font-size: 13.5px; color: #454d5e; line-height: 1.9; }
+  .composer { margin: 0 48px 28px; border: 1px solid #e6eaf2; border-radius: 16px; padding: 14px 16px;
+    color: #a8afba; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+  .send { width: 24px; height: 24px; border-radius: 50%; background: #eef0f5; display: grid; place-items: center; color: #98a0ae; font-size: 11px; }
+</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">D</div><div class="name">deepseek</div></div>
+    <div class="new-chat">＋ 新建对话</div>
+    <div class="scroll">
+      <div class="conv-list" id="conv-list">
+        <div class="section-title">置顶</div>
+        <a class="conv-item" href="/a/chat/s/c1">Vue3 响应式原理</a>
+        <a class="conv-item" href="/a/chat/s/c2">SQL 优化思路</a>
+        <a class="conv-item" href="/a/chat/s/c3">论文润色</a>
+        <a class="conv-item" href="/a/chat/s/c4">MV3 扩展调试笔记</a>
+        <a class="conv-item" href="/a/chat/s/c5">Python 爬虫</a>
+        <a class="conv-item" href="/a/chat/s/c6">面试题整理</a>
+        <a class="conv-item" href="/a/chat/s/c7">周报模板</a>
+      </div>
+    </div>
+    <div class="foot"><div class="avatar">我</div><div class="who">我的账号</div></div>
+  </aside>
+  <main>
+    <div class="topbar"><span>Vue3 响应式原理</span><span style="color:#98a0ae;font-weight:400">分享</span></div>
+    <div class="chat">
+      <div class="msg-user">Vue3 的响应式原理用 Proxy 实现，那它和 Vue2 的 defineProperty 有什么本质区别？</div>
+      <div class="msg-ai"><div class="avatar2">D</div><div class="bubble">
+        核心区别在于拦截的粒度与能力：defineProperty 只能劫持已存在的属性，新增和删除属性需要额外的 API 辅助；
+        而 Proxy 是对整个对象的代理，可以拦截 get、set、deleteProperty、has 等 13 种操作，
+        因此天然支持数组索引与 length 的变化，也就不需要 Vue2 那套重写数组方法的补丁。
+      </div></div>
+    </div>
+    <div class="composer"><span>给 DeepSeek 发送消息</span><span class="send">▲</span></div>
+  </main>
+
+<script>
+  try {
+    var KEY = "dscm.data.v1";
+    if (!localStorage.getItem(KEY)) {
+      localStorage.setItem(KEY, JSON.stringify({
+        folders: [
+          { id: "f_1", name: "工作", order: 0, createdAt: 1 },
+          { id: "f_2", name: "学习", order: 1, createdAt: 2 },
+          { id: "f_3", name: "写作素材", order: 2, createdAt: 3 }
+        ],
+        membership: {
+          c1: { folderId: "f_2", title: "Vue3 响应式原理", addedAt: 2 },
+          c2: { folderId: "f_1", title: "SQL 优化思路", addedAt: 3 },
+          c3: { folderId: "f_2", title: "论文润色", addedAt: 4 }
+        }
+      }));
+    }
+  } catch (e) {}
+</script>
+<script src="../extension/src/store.js"></script>
+<script src="../extension/src/ui.js"></script>
+<script src="../extension/src/main.js"></script>
+<script>
+  if (location.search.indexOf("open=1") >= 0) {
+    var tries = 0;
+    var t = setInterval(function () {
+      var el = document.getElementById("dscm-entry");
+      if (el) { clearInterval(t); el.click(); }
+      if (++tries > 60) clearInterval(t);
+    }, 50);
+  }
+</script>
+<script>
+  function __openSoon(after) {
+    var t = setInterval(function () {
+      var el = document.getElementById("dscm-entry");
+      if (!el) return;
+      clearInterval(t);
+      el.click();
+      setTimeout(after, 260);
+    }, 50);
+  }
+  if (location.search.indexOf("m3=1") >= 0) __openSoon(function () { window.DSCMUI.openFolder("f_2"); });
+</script>
+<script>
+  if (location.search.indexOf("menu=1") >= 0) {
+    var tm = setInterval(function () {
+      var a = document.querySelectorAll('a[href*="/chat/s/"]')[3];
+      if (!a) return;
+      clearInterval(tm);
+      var r = a.getBoundingClientRect();
+      a.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: r.left + 120, clientY: r.top + 16 }));
+    }, 80);
+  }
+</script>
+<script>
+  if (location.search.indexOf("del=1") >= 0) {
+    setTimeout(function () {
+      var a = document.querySelector('a[href*="/chat/s/c2"]');
+      if (a && a.parentNode) a.parentNode.removeChild(a);
+    }, 2500);
+    setTimeout(function () {
+      var d = {};
+      try { d = JSON.parse(localStorage.getItem("dscm.data.v1") || "{}"); } catch (e) {}
+      var pre = document.createElement("pre");
+      pre.id = "result";
+      pre.textContent = "RESULT " + JSON.stringify({ keys: Object.keys(d.membership || {}), folders: (d.folders || []).length });
+      document.body.appendChild(pre);
+    }, 12000);
+  }
+</script>
+<script>
+  if (location.search.indexOf("menuclick=1") >= 0) {
+    setTimeout(function () {
+      var a = document.querySelectorAll('a[href*="/chat/s/"]')[4];
+      var r = a.getBoundingClientRect();
+      a.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true, clientX: r.left + 120, clientY: r.top + 16 }));
+      setTimeout(function () {
+        var host = document.getElementById("dscm-ui-host");
+        var menu = host.shadowRoot.querySelector(".menu");
+        var item = menu.querySelector(".mi");
+        var style = getComputedStyle(menu).pointerEvents;
+        item.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true }));
+        setTimeout(function () {
+          var d = JSON.parse(localStorage.getItem("dscm.data.v1") || "{}");
+          var pre = document.createElement("pre");
+          pre.id = "result";
+          pre.textContent = "RESULT " + JSON.stringify({ pointerEvents: style, membership: Object.keys(d.membership || {}) });
+          document.body.appendChild(pre);
+        }, 400);
+      }, 300);
+    }, 900);
+  }
+</script>
+<script>
+  function __sh() { return document.getElementById("dscm-ui-host").shadowRoot; }
+  function __open(fn) {
+    var t = setInterval(function () {
+      var el = document.getElementById("dscm-entry");
+      if (!el) return;
+      clearInterval(t);
+      el.click();
+      setTimeout(fn, 180);
+    }, 50);
+  }
+  function __openRowMenu(cb) {
+    __open(function () {
+      var sh = __sh();
+      var more = sh.querySelector(".row .more");
+      if (!more) return;
+      more.click();
+      setTimeout(function () { cb(sh); }, 150);
+    });
+  }
+  var q = location.search;
+  if (q.indexOf("foldermenu=1") >= 0) __openRowMenu(function () {});
+  if (q.indexOf("renfolder=1") >= 0) __openRowMenu(function (sh) { sh.querySelectorAll(".menu .mi")[0].click(); });
+  if (q.indexOf("delfolder=1") >= 0) __openRowMenu(function (sh) {
+    var items = sh.querySelectorAll(".menu .mi");
+    items[items.length - 1].click();
+  });
+  if (q.indexOf("foot=1") >= 0) {
+    __open(function () { __sh().querySelector(".foot-more").click(); });
+  }
+  if (q.indexOf("prompt=1") >= 0) {
+    setTimeout(function () {
+      window.DSCMUI.promptNew({ id: "zz_demo", title: "帮我把这段代码改成 TypeScript" });
+    }, 700);
+  }
+</script>
+<script>
+  (function () {
+    var q = location.search;
+    function dump(tag) {
+      var d = {};
+      try { d = JSON.parse(localStorage.getItem("dscm.data.v1") || "{}"); } catch (e) {}
+      var pre = document.createElement("pre");
+      pre.id = "result";
+      pre.textContent = "RESULT " + JSON.stringify({ tag: tag, c1: d.membership && d.membership.c1 && d.membership.c1.title, c2: d.membership && d.membership.c2 && d.membership.c2.title, keys: Object.keys(d.membership || {}) });
+      document.body.appendChild(pre);
+    }
+    if (q.indexOf("renconv=1") >= 0) {
+      setTimeout(function () {
+        var a = document.querySelector('a[href*="/chat/s/c1"]');
+        if (a) a.textContent = "Vue3 原理（改名后）";
+      }, 2500);
+      setTimeout(function () { dump("rename"); }, 10000);
+    }
+  })();
+</script>
+<script>
+  if (location.search.indexOf("rekey=1") >= 0) {
+    setTimeout(function () {
+      var a = document.querySelector('a[href*="/chat/s/c1"]');
+      if (!a) return;
+      a.setAttribute("href", "/a/chat/s/c1_renamed");
+      a.textContent = "Vue3 原理（改名后）";
+    }, 3000);
+    setTimeout(function () {
+      var d = JSON.parse(localStorage.getItem("dscm.data.v1") || "{}");
+      var pre = document.createElement("pre");
+      pre.id = "result";
+      pre.textContent = "RESULT " + JSON.stringify({ keys: Object.keys(d.membership || {}), c1new: d.membership && d.membership.c1_renamed });
+      document.body.appendChild(pre);
+    }, 12000);
+  }
+</script>
+</body>
+</html>

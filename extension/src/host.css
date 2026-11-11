@@ -1,0 +1,42 @@
+/* 注入在 DeepSeek 侧栏里的入口行 —— 只作用于我们自己的 #dscm-entry */
+#dscm-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  margin: 4px 8px 6px;
+  padding: 0 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  font: 700 13.5px/1 "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+  letter-spacing: .01em;
+  color: #2b3241;
+  background: transparent;
+  transition: background-color .15s ease, color .15s ease;
+}
+#dscm-entry:hover { background: rgba(15, 23, 42, .055); }
+#dscm-entry:focus-visible { outline: 2px solid rgba(77, 107, 254, .55); outline-offset: 1px; }
+#dscm-entry.dscm-open { background: rgba(77, 107, 254, .10); color: #3350d0; }
+#dscm-entry svg { width: 17px; height: 17px; flex: 0 0 auto; opacity: .95; }
+#dscm-entry .dscm-label { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#dscm-entry .dscm-count {
+  flex: 0 0 auto;
+  min-width: 18px;
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 17px;
+  padding: 0 6px;
+  border-radius: 9px;
+  background: rgba(77, 107, 254, .12);
+  color: #4d6bfe;
+}
+/* 深色主题由 JS 依据页面实际底色切换 */
+#dscm-entry.dscm-dark { color: #c8d0da; }
+#dscm-entry.dscm-dark:hover { background: rgba(255, 255, 255, .075); }
+#dscm-entry.dscm-dark.dscm-open { background: rgba(122, 145, 255, .16); color: #a9b8ff; }
+#dscm-entry.dscm-dark .dscm-count { background: rgba(122, 145, 255, .18); color: #a9b8ff; }

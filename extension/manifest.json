@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "DeepSeek 对话文件夹",
+  "version": "0.3.1",
+  "description": "给 DeepSeek 网页版的对话历史加文件夹：新建文件夹，把对话归进去。纯本地、不联网。",
+  "minimum_chrome_version": "110",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://chat.deepseek.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_title": "显示 / 隐藏对话文件夹",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.deepseek.com/*"
+      ],
+      "js": [
+        "src/store.js",
+        "src/ui.js",
+        "src/main.js"
+      ],
+      "css": [
+        "src/host.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "src/panel.css"
+      ],
+      "matches": [
+        "https://chat.deepseek.com/*"
+      ]
+    }
+  ]
+}
